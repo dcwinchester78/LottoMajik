@@ -1,0 +1,558 @@
+{
+  "generatedUtc": "2026-08-05T23:38:28+00:00",
+  "configFingerprint": "5e6d799e6a9c",
+  "parameters": {
+    "scope_start": "2006-04-26",
+    "min_rows": 2370,
+    "avg_window": 3,
+    "bucket_small_max": 3,
+    "bucket_medium_max": 9
+  },
+  "drawCount": 2375,
+  "dateRange": {
+    "first": "2006-04-26",
+    "last": "2026-08-03"
+  },
+  "weekdayCounts": {
+    "Mon": 259,
+    "Sat": 1058,
+    "Wed": 1058
+  },
+  "unusualGapCount": 0,
+  "findings": [],
+  "deltaSum": {
+    "min": 11,
+    "max": 53,
+    "mean": 39.02
+  },
+  "codeFrequencies": {
+    "deltaCodeExact": {
+      "distinctCodes": 2372,
+      "totalCoded": 2375,
+      "uniformBaselinePerCode": 1.0,
+      "top": [
+        {
+          "code": "01-03-14-07-02",
+          "count": 2,
+          "vsUniform": 2.0
+        },
+        {
+          "code": "01-07-02-12-01",
+          "count": 2,
+          "vsUniform": 2.0
+        },
+        {
+          "code": "01-04-03-05-09",
+          "count": 2,
+          "vsUniform": 2.0
+        },
+        {
+          "code": "02-06-09-09-20",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "02-03-18-03-13",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "12-07-13-03-02",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "07-01-07-14-01",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "02-04-10-26-03",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "01-11-02-26-02",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "10-01-06-02-27",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "12-19-07-04-02",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "21-11-08-08-01",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "03-07-07-17-11",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "03-10-07-12-06",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "04-09-08-14-05",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "04-13-01-02-03",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "06-01-10-02-05",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "24-03-10-04-07",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "02-01-22-01-20",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "17-14-05-05-03",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "11-03-09-10-02",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "11-03-07-23-05",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "06-17-05-01-03",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "03-04-07-08-06",
+          "count": 1,
+          "vsUniform": 1.0
+        },
+        {
+          "code": "13-07-05-01-02",
+          "count": 1,
+          "vsUniform": 1.0
+        }
+      ]
+    },
+    "deltaCodeBucket": {
+      "distinctCodes": 235,
+      "totalCoded": 2375,
+      "uniformBaselinePerCode": 10.11,
+      "top": [
+        {
+          "code": "LMMMM",
+          "count": 24,
+          "vsUniform": 2.37
+        },
+        {
+          "code": "MLMSM",
+          "count": 23,
+          "vsUniform": 2.28
+        },
+        {
+          "code": "SLMMM",
+          "count": 23,
+          "vsUniform": 2.28
+        },
+        {
+          "code": "MLMMS",
+          "count": 22,
+          "vsUniform": 2.18
+        },
+        {
+          "code": "MSLML",
+          "count": 21,
+          "vsUniform": 2.08
+        },
+        {
+          "code": "SSMML",
+          "count": 21,
+          "vsUniform": 2.08
+        },
+        {
+          "code": "MLMLM",
+          "count": 20,
+          "vsUniform": 1.98
+        },
+        {
+          "code": "MLLSM",
+          "count": 20,
+          "vsUniform": 1.98
+        },
+        {
+          "code": "MMLMS",
+          "count": 20,
+          "vsUniform": 1.98
+        },
+        {
+          "code": "LMMML",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "MMMSL",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "MMLSM",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "MMSML",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "MMSLL",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "MLMLS",
+          "count": 19,
+          "vsUniform": 1.88
+        },
+        {
+          "code": "LSMSL",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "LLMMS",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "MMMLM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "LSMLM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "MMMLS",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "LSMMM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "SMLMM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "LLMMM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "MLLMM",
+          "count": 18,
+          "vsUniform": 1.78
+        },
+        {
+          "code": "LMLSM",
+          "count": 18,
+          "vsUniform": 1.78
+        }
+      ]
+    },
+    "deltaCodeShape": {
+      "distinctCodes": 2240,
+      "totalCoded": 2375,
+      "uniformBaselinePerCode": 1.06,
+      "top": [
+        {
+          "code": "01-02-07-09-20",
+          "count": 3,
+          "vsUniform": 2.83
+        },
+        {
+          "code": "01-01-05-12-25",
+          "count": 3,
+          "vsUniform": 2.83
+        },
+        {
+          "code": "01-06-08-09-14",
+          "count": 3,
+          "vsUniform": 2.83
+        },
+        {
+          "code": "01-04-07-10-12",
+          "count": 3,
+          "vsUniform": 2.83
+        },
+        {
+          "code": "02-04-07-12-19",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-03-07-14",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-03-04-13",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-05-06-10",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "02-03-09-10-11",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-05-07-13",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-03-10-14",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "02-02-03-06-09",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-04-07-09-26",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "04-05-05-11-12",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-03-04-07-22",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-01-02-06-19",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "02-03-04-08-09",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "03-03-04-06-18",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-03-07-10-12",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-05-06-09-26",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "02-03-07-08-13",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "02-03-06-08-16",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "04-06-07-11-15",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "01-02-05-07-23",
+          "count": 2,
+          "vsUniform": 1.89
+        },
+        {
+          "code": "04-04-09-13-15",
+          "count": 2,
+          "vsUniform": 1.89
+        }
+      ]
+    },
+    "shuffleCodeDirection": {
+      "distinctCodes": 248,
+      "totalCoded": 2374,
+      "uniformBaselinePerCode": 9.57,
+      "top": [
+        {
+          "code": "UUUUUU",
+          "count": 304,
+          "vsUniform": 31.76
+        },
+        {
+          "code": "DDDDDD",
+          "count": 297,
+          "vsUniform": 31.03
+        },
+        {
+          "code": "UDDDDD",
+          "count": 100,
+          "vsUniform": 10.45
+        },
+        {
+          "code": "DDDDDU",
+          "count": 92,
+          "vsUniform": 9.61
+        },
+        {
+          "code": "UUUUUD",
+          "count": 78,
+          "vsUniform": 8.15
+        },
+        {
+          "code": "DUUUUU",
+          "count": 61,
+          "vsUniform": 6.37
+        },
+        {
+          "code": "DDUUUU",
+          "count": 60,
+          "vsUniform": 6.27
+        },
+        {
+          "code": "UUDDDD",
+          "count": 55,
+          "vsUniform": 5.75
+        },
+        {
+          "code": "DDDUUU",
+          "count": 54,
+          "vsUniform": 5.64
+        },
+        {
+          "code": "UUUUDD",
+          "count": 49,
+          "vsUniform": 5.12
+        },
+        {
+          "code": "UUUDDD",
+          "count": 47,
+          "vsUniform": 4.91
+        },
+        {
+          "code": "DUDDDD",
+          "count": 38,
+          "vsUniform": 3.97
+        },
+        {
+          "code": "DDDDUU",
+          "count": 37,
+          "vsUniform": 3.87
+        },
+        {
+          "code": "UUUUDU",
+          "count": 36,
+          "vsUniform": 3.76
+        },
+        {
+          "code": "DUUUUD",
+          "count": 31,
+          "vsUniform": 3.24
+        },
+        {
+          "code": "SUUUUU",
+          "count": 29,
+          "vsUniform": 3.03
+        },
+        {
+          "code": "UDUUUU",
+          "count": 28,
+          "vsUniform": 2.93
+        },
+        {
+          "code": "DDDDUD",
+          "count": 28,
+          "vsUniform": 2.93
+        },
+        {
+          "code": "DDUUDD",
+          "count": 25,
+          "vsUniform": 2.61
+        },
+        {
+          "code": "SDDDDD",
+          "count": 24,
+          "vsUniform": 2.51
+        },
+        {
+          "code": "UUUDUU",
+          "count": 24,
+          "vsUniform": 2.51
+        },
+        {
+          "code": "UDDDDU",
+          "count": 22,
+          "vsUniform": 2.3
+        },
+        {
+          "code": "DDDDDS",
+          "count": 21,
+          "vsUniform": 2.19
+        },
+        {
+          "code": "UDDUUU",
+          "count": 21,
+          "vsUniform": 2.19
+        },
+        {
+          "code": "UUDDDU",
+          "count": 21,
+          "vsUniform": 2.19
+        }
+      ]
+    }
+  }
+}

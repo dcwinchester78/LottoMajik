@@ -17,6 +17,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
+from .config import DEFAULT, Config
 from .encode import (
     decode_delta_code_exact,
     decode_shuffle_code_exact,
@@ -122,9 +123,13 @@ def compute_num_diff_prev(df: pd.DataFrame) -> pd.DataFrame:
 def compute_delta_sum_avg3(df: pd.DataFrame, window: int = AVG_WINDOW) -> pd.DataFrame:
     """Mean deltaSum of the previous `window` draws, excluding the current one.
 
-    shift(1) first, then roll: rolling(3) alone would include the current draw
-    and make the feature partly self-referential. Null until three prior
-    retained draws exist -- rows 0, 1 and 2.
+    shift(1) first, then roll: rolling(N) alone would include the current draw
+    and make the feature partly self-referential. Null until `window` prior
+    retained draws exist.
+
+    The column name keeps the `avg3` suffix regardless of window size -- it is
+    the field name in the emitted schema. The window actually used is recorded
+    in the config fingerprint on every output file.
     """
     df = df.copy()
     df["delta_sum_avg3"] = (
@@ -229,7 +234,7 @@ def check_code_invariants(df: pd.DataFrame) -> None:
 # ===========================================================================
 
 
-def compute_codes(df: pd.DataFrame) -> pd.DataFrame:
+def compute_codes(df: pd.DataFrame, config: Config = DEFAULT) -> pd.DataFrame:
     """F5 and F6. Encoders are applied row-wise over plain lists.
 
     Row-wise rather than vectorised on purpose: these produce strings, the
@@ -240,7 +245,10 @@ def compute_codes(df: pd.DataFrame) -> pd.DataFrame:
 
     deltas = df[DELTA_COLS].to_numpy().tolist()
     df["delta_code_exact"] = [delta_code_exact(d) for d in deltas]
-    df["delta_code_bucket"] = [delta_code_bucket(d) for d in deltas]
+    df["delta_code_bucket"] = [
+        delta_code_bucket(d, config.bucket_small_max, config.bucket_medium_max)
+        for d in deltas
+    ]
     df["delta_code_shape"] = [delta_code_shape(d) for d in deltas]
 
     df["shuffle_code_exact"] = _encode_or_none(df, NUM_DIFF_COLS, shuffle_code_exact)
@@ -276,17 +284,25 @@ def _encode_or_none(df: pd.DataFrame, cols: list[str], fn) -> list:
     return out
 
 
-def build_features(df: pd.DataFrame, *, validate: bool = True) -> pd.DataFrame:
-    """F1 -> F6 in order. Each step consumes the previous step's output."""
+def build_features(
+    df: pd.DataFrame, *, config: Config = DEFAULT, validate: bool = True
+) -> pd.DataFrame:
+    """F1 -> F6 in order. Each step consumes the previous step's output.
+
+    The config is attached to `.attrs` so downstream emission can stamp the
+    parameters into the output without them being passed separately and
+    drifting out of sync with the data they describe.
+    """
     df = compute_deltas(df)
     df = compute_delta_sum(df)
     df = compute_delta_diff_prev(df)
     df = compute_num_diff_prev(df)
-    df = compute_delta_sum_avg3(df)
-    df = compute_codes(df)
+    df = compute_delta_sum_avg3(df, window=config.avg_window)
+    df = compute_codes(df, config)
     if validate:
         check_delta_invariants(df)
         check_code_invariants(df)
+    df.attrs["config"] = config
     return df
 
 

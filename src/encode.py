@@ -50,22 +50,30 @@ def delta_code_exact(deltas: Sequence[int]) -> str:
     return "-".join(f"{int(d):02d}" for d in deltas)
 
 
-def bucket_of(delta: int) -> str:
-    """Size class of a single gap."""
-    if delta <= BUCKET_SMALL_MAX:
+def bucket_of(
+    delta: int,
+    small_max: int = BUCKET_SMALL_MAX,
+    medium_max: int = BUCKET_MEDIUM_MAX,
+) -> str:
+    """Size class of a single gap. Thresholds are parameters, not facts."""
+    if delta <= small_max:
         return "S"
-    if delta <= BUCKET_MEDIUM_MAX:
+    if delta <= medium_max:
         return "M"
     return "L"
 
 
-def delta_code_bucket(deltas: Sequence[int]) -> str:
+def delta_code_bucket(
+    deltas: Sequence[int],
+    small_max: int = BUCKET_SMALL_MAX,
+    medium_max: int = BUCKET_MEDIUM_MAX,
+) -> str:
     """Positional size classes. `[19, 2, 9, 9, 1]` -> `'LSMMS'`.
 
     Coarser than `exact`, so recurrence is observable: 3^5 = 243 possible codes
     against thousands of draws, versus tens of thousands of exact codes.
     """
-    return "".join(bucket_of(int(d)) for d in deltas)
+    return "".join(bucket_of(int(d), small_max, medium_max) for d in deltas)
 
 
 def delta_code_shape(deltas: Sequence[int]) -> str:
@@ -78,10 +86,14 @@ def delta_code_shape(deltas: Sequence[int]) -> str:
     return "-".join(f"{int(d):02d}" for d in sorted(deltas))
 
 
-def delta_code(deltas: Sequence[int]) -> dict[str, str]:
+def delta_code(
+    deltas: Sequence[int],
+    small_max: int = BUCKET_SMALL_MAX,
+    medium_max: int = BUCKET_MEDIUM_MAX,
+) -> dict[str, str]:
     return {
         "exact": delta_code_exact(deltas),
-        "bucket": delta_code_bucket(deltas),
+        "bucket": delta_code_bucket(deltas, small_max, medium_max),
         "shape": delta_code_shape(deltas),
     }
 

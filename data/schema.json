@@ -1,0 +1,193 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lotto Texas draw feature record",
+  "description": "Generated with config 5e6d799e6a9c: scope>=2006-04-26  avg_window=3  buckets=S<=3<M<=9<L  [5e6d799e6a9c]. Descriptive features only -- this file contains no predictions.",
+  "type": "object",
+  "required": [
+    "drawId",
+    "date",
+    "numbers",
+    "deltas",
+    "deltaSum",
+    "deltaCode",
+    "flags"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "drawId": {
+      "type": "string",
+      "format": "date"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "year": {
+      "type": "integer"
+    },
+    "month": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 12
+    },
+    "day": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 31
+    },
+    "dayOfWeek": {
+      "type": "string"
+    },
+    "drawOrder": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 54
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "numbers": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 54
+      },
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "deltas": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "deltaSum": {
+      "type": "integer",
+      "minimum": 5
+    },
+    "deltaDiffPrev": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "integer"
+      },
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "deltaSumAvg3": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "deltaCode": {
+      "type": "object",
+      "required": [
+        "exact",
+        "bucket",
+        "shape"
+      ],
+      "properties": {
+        "exact": {
+          "type": "string"
+        },
+        "bucket": {
+          "type": "string",
+          "pattern": "^[SML]{5}$"
+        },
+        "shape": {
+          "type": "string"
+        }
+      }
+    },
+    "shuffleCode": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "exact",
+            "direction",
+            "magnitude"
+          ],
+          "properties": {
+            "exact": {
+              "type": "string"
+            },
+            "direction": {
+              "type": "string"
+            },
+            "magnitude": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "shuffleCodeDelta": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "exact",
+            "direction",
+            "magnitude"
+          ],
+          "properties": {
+            "exact": {
+              "type": "string"
+            },
+            "direction": {
+              "type": "string"
+            },
+            "magnitude": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "prevDrawId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prevGapDays": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "flags": {
+      "type": "object",
+      "required": [
+        "hasPrev",
+        "unusualGap"
+      ],
+      "properties": {
+        "hasPrev": {
+          "type": "boolean"
+        },
+        "unusualGap": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

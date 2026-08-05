@@ -22,6 +22,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from .config import Config
 from .validate import (
     NUM_COLS,
     RAW_COLS,
@@ -101,6 +102,7 @@ def add_date_parts(df: pd.DataFrame) -> pd.DataFrame:
 def ingest(
     csv_path: Path | str = DEFAULT_CSV,
     *,
+    config: "Config | None" = None,
     min_rows: int | None = MIN_ROWS,
     validate: bool = True,
     check_append_only: bool = False,
@@ -120,8 +122,13 @@ def ingest(
     and records the new state. Left off by default so tests and one-off analysis
     do not mutate the manifest.
     """
+    # An explicit config overrides the module defaults for scope and floor.
+    scope_start = config.scope_start if config is not None else SCOPE_START
+    if config is not None:
+        min_rows = config.min_rows
+
     df = load_raw(csv_path)
-    df = apply_scope(df)
+    df = apply_scope(df, scope_start)
     df = sort_balls(df)
     df = add_date_parts(df)
 
