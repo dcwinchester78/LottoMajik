@@ -219,19 +219,29 @@ so `git diff` on `data/` stays readable.
 ├── MEMORY.md               accumulated findings
 ├── lottotexas.csv          source data
 ├── src/
+│   ├── config.py           pipeline parameters + fingerprint
 │   ├── ingest.py           CSV → validated DataFrame (applies the 2006 cutoff)
 │   ├── validate.py         invariant checks (raise) + expectation checks (report)
 │   ├── manifest.py         append-only integrity across repeated ingestions
 │   ├── append.py           validated write path for manually-entered draws
 │   ├── features.py         F1–F6 computation
-│   └── encode.py           deltaCode / shuffleCode encoders
+│   ├── encode.py           deltaCode / shuffleCode encoders
+│   └── emit.py             DataFrame → data/*.json
 ├── tests/
 │   ├── test_ingest.py
 │   ├── test_features.py
-│   └── test_encode.py
+│   ├── test_encode.py
+│   └── test_emit.py
 ├── data/                   generated output (committed)
+├── web/                    React app (Phase 5) — reads data/features.json
 └── notebooks/              exploratory analysis
 ```
+
+**One repo, deliberately.** `data/features.json` is a contract between the pipeline and
+the app. A change to feature logic and the UI change that depends on it belong in one
+commit, reviewable as one diff. Split across two repos, version skew becomes possible —
+the app expecting a field the JSON no longer emits — with no single commit showing when
+it broke.
 
 Stack: Python 3.10+, pandas, pytest. No ML frameworks — see non-goals.
 
@@ -246,7 +256,78 @@ Stack: Python 3.10+, pandas, pytest. No ML frameworks — see non-goals.
 | 2 | Features F1–F4 | Golden-value tests pass |
 | 3 | Encoders F5–F6 | Codes round-trip, frequency tables sane |
 | 4 | JSON emission + schema | `data/*.json` written and schema-validated |
-| 5 | React consumption contract | App reads `features.json` end to end |
-| 6 | Descriptive pattern analysis | Findings recorded in `MEMORY.md` |
+| 5 | React app | App reads `features.json` end to end |
+| 6 | Descriptive pattern analysis | Findings recorded in `MEMORY.md`, against a real null |
 
-Phase 4 completes the stated first goal: features into a document store the app can read.
+Phases 0–4 are complete. Phase 4 delivered the stated first goal: features into a store
+the app can read.
+
+---
+
+# Phase 5 brief — the React app
+
+Build in `web/`, Vite + React. This section exists so the session that builds it starts
+with the contract rather than inferring it.
+
+## The data contract
+
+The app consumes `data/features.json`: an array of records, ascending by date, shaped
+exactly as documented above and validated against `data/schema.json`. Treat the schema as
+authoritative — it is generated from the same config as the data.
+
+**Handle nulls as a first-class case, not an edge case.** The first retained draw
+(2006-04-26) has no predecessor, so `deltaDiffPrev`, `deltaSumAvg3`, `shuffleCode`,
+`shuffleCodeDelta`, `prevDrawId` and `prevGapDays` are all `null`. A record where
+`flags.hasPrev` is `false` is not missing data — it is complete data about a draw that
+begins the series. Rendering `0`, `—`, or `NaN` there would assert something false.
+Currently exactly one record is in this state; do not hard-code that assumption.
+
+`data/summary.json` carries `configFingerprint`. Surface it somewhere in the UI. Two
+datasets built with different parameters are not comparable, and the fingerprint is the
+only thing that makes that visible.
+
+### Vite and the data path
+
+Vite will not import from outside its project root, so `web/` cannot reach up into
+`../data/`. Resolved by having `emit.py` write a second copy into `web/public/data/`
+(`out_dir` is already a parameter) rather than by relaxing Vite's filesystem rules or
+adding a build-time copy step. The app then fetches `/data/features.json` as a normal
+static asset. Keep `data/` at the repo root as the canonical, committed output.
+
+## What the first views should show
+
+Descriptive views over history. In rough priority:
+
+1. **Draw table** — date, numbers, deltas, deltaSum, deltaCode. Sortable, filterable by
+   date range. The workhorse.
+2. **Delta distribution** — histogram of all five delta positions, and per-position, so
+   the positional structure is visible rather than collapsed.
+3. **deltaSum over time** — line chart with `deltaSumAvg3` overlaid.
+4. **Code frequency** — bucket codes and shuffle directions by count, **always displayed
+   against the baseline** (see below).
+5. **Single draw detail** — one draw with its deltas, its codes, and its movement from
+   the previous draw.
+
+## Two constraints specific to the UI
+
+**No prediction, restated for the interface.** The hard rule in `CLAUDE.md` applies to
+pixels as much as to functions. Do not build: a "suggested numbers" panel, a hot/cold
+ball display, a "due" indicator, a number picker that highlights candidates, a countdown
+framing the next draw as forecastable, or any control that produces a set of numbers.
+Sorting a frequency table descending is fine; labelling the top row "most likely" is not.
+The app describes what the machine has done, in the past tense.
+
+**Never show a count without its baseline.** A frequency bar with no comparison implies
+significance that has not been established. Every count in the UI needs its expected
+value beside it, and the summary's `uniformBaselinePerCode` is a *crude floor*, not a
+hypothesis test — a uniform null ignores that some codes are structurally far more
+reachable than others. `shuffleCodeDirection` shows this vividly: `UUUUUU` appears ~32×
+"uniform expectation", which is close to meaningless, because if the previous draw
+skewed low then almost any successor moves every position up. Until Phase 6 supplies a
+proper null, label these as raw counts and say plainly that the baseline is naive.
+
+## Done when
+
+The app loads `features.json`, renders the draw table and at least one chart over the
+full archive, handles the null-predecessor record correctly, displays the config
+fingerprint, and shows no view that implies a future draw is knowable.

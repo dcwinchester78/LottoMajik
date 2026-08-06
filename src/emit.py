@@ -32,6 +32,13 @@ from .validate import NUM_COLS
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 
+# The React app (Phase 5) lives in web/ and is served by Vite, which will not
+# import from outside its own project root. Rather than relaxing Vite's
+# filesystem rules or adding a build-time copy step, emission writes a second
+# copy here and the app fetches it as an ordinary static asset. data/ at the
+# repo root stays canonical and committed.
+WEB_DATA_DIR = Path(__file__).resolve().parents[1] / "web" / "public" / "data"
+
 FLOAT_PLACES = 2
 
 
@@ -303,22 +310,7 @@ def _write_json(path: Path, payload) -> None:
     )
 
 
-def emit(
-    df: pd.DataFrame | None = None,
-    *,
-    config: Config = DEFAULT,
-    out_dir: Path | str = DATA_DIR,
-) -> dict:
-    """Build every output file. Returns a manifest of what was written."""
-    if df is None:
-        from .ingest import ingest
-
-        df = build_features(ingest(config=config, report=False), config=config)
-
-    config = df.attrs.get("config", config)
-    out_dir = Path(out_dir)
-    records = to_records(df)
-
+def _write_all(records: list[dict], summary: dict, schema: dict, out_dir: Path) -> None:
     _write_json(out_dir / "features.json", records)
 
     jsonl = out_dir / "features.jsonl"
@@ -329,22 +321,59 @@ def emit(
         encoding="utf-8",
     )
 
-    _write_json(out_dir / "schema.json", build_schema(config))
-    summary = build_summary(df, config)
+    _write_json(out_dir / "schema.json", schema)
     _write_json(out_dir / "summary.json", summary)
+
+
+def emit(
+    df: pd.DataFrame | None = None,
+    *,
+    config: Config = DEFAULT,
+    out_dir: Path | str = DATA_DIR,
+    also_web: bool = False,
+) -> dict:
+    """Build every output file. Returns a manifest of what was written.
+
+    `also_web=True` writes an identical copy into web/public/data/ for the Vite
+    app to fetch. Same bytes, two locations -- the copy is a serving detail, not
+    a second source of truth.
+    """
+    if df is None:
+        from .ingest import ingest
+
+        df = build_features(ingest(config=config, report=False), config=config)
+
+    config = df.attrs.get("config", config)
+    out_dir = Path(out_dir)
+    records = to_records(df)
+    summary = build_summary(df, config)
+    schema = build_schema(config)
+
+    written = [str(out_dir)]
+    _write_all(records, summary, schema, out_dir)
+
+    if also_web:
+        _write_all(records, summary, schema, WEB_DATA_DIR)
+        written.append(str(WEB_DATA_DIR))
 
     return {
         "records": len(records),
         "outDir": str(out_dir),
+        "writtenTo": written,
         "fingerprint": config.fingerprint,
         "files": ["features.json", "features.jsonl", "schema.json", "summary.json"],
     }
 
 
 if __name__ == "__main__":
-    result = emit()
-    print(f"Wrote {result['records']} records to {result['outDir']}")
+    import sys
+
+    # `python -m src.emit --web` also refreshes the copy the React app serves.
+    result = emit(also_web="--web" in sys.argv)
+    print(f"Wrote {result['records']} records")
     print(f"Config fingerprint: {result['fingerprint']}")
-    for name in result["files"]:
-        path = Path(result["outDir"]) / name
-        print(f"  {name:18} {path.stat().st_size:>10,} bytes")
+    for location in result["writtenTo"]:
+        print(f"\n  {location}")
+        for name in result["files"]:
+            path = Path(location) / name
+            print(f"    {name:18} {path.stat().st_size:>10,} bytes")
