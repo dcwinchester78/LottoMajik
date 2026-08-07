@@ -29,6 +29,9 @@ build/
 Thumbs.db
 desktop.ini
 
+# Claude Code — machine-local permission grants, not shared config
+.claude/settings.local.json
+
 # NOTE: data/ is intentionally NOT ignored.
 # Generated feature JSON is committed so the React app can consume it and
 # so feature-logic changes show up as reviewable diffs.
