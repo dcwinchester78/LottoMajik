@@ -22,6 +22,20 @@ export function binLabel(bin) {
   return bin.start === bin.end ? `${bin.start}` : `${bin.start}–${bin.end}`;
 }
 
+/** Index of the value in a sorted ascending array closest to `target`. */
+export function bisectNearest(sortedNums, target) {
+  let lo = 0;
+  let hi = sortedNums.length - 1;
+  if (target <= sortedNums[lo]) return lo;
+  if (target >= sortedNums[hi]) return hi;
+  while (hi - lo > 1) {
+    const mid = (lo + hi) >> 1;
+    if (sortedNums[mid] < target) lo = mid;
+    else hi = mid;
+  }
+  return target - sortedNums[lo] <= sortedNums[hi] - target ? lo : hi;
+}
+
 /** Reads a hovered element's position relative to a container ref, for tooltip placement. */
 export function relativeRect(containerEl, targetEl) {
   const c = containerEl.getBoundingClientRect();
