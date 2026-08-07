@@ -1,0 +1,433 @@
+/* Shared styling for the five view components -- tables, charts, filters,
+   tooltips. One file so the views read as one system rather than five. */
+
+/* ---- filter row ---- */
+
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-bottom: 14px;
+}
+
+.filter-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--text-secondary);
+}
+
+.filter-field input[type="date"],
+.filter-field input[type="search"] {
+  font: inherit;
+  font-size: 12.5px;
+  color: var(--text-primary);
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+}
+
+.filter-row .btn {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 10px;
+}
+
+.filter-row .btn:hover {
+  color: var(--text-primary);
+}
+
+.filter-row .result-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* ---- table ---- */
+
+.data-table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  font-size: 12.5px;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 7px 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.data-table thead th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  position: sticky;
+  top: 0;
+  background: var(--surface-1);
+}
+
+.data-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.data-table th.sortable:hover {
+  color: var(--text-primary);
+}
+
+.data-table .sort-arrow {
+  margin-left: 4px;
+  color: var(--series-blue);
+}
+
+.data-table tbody tr {
+  cursor: pointer;
+}
+
+.data-table tbody tr:hover {
+  background: var(--surface-page);
+}
+
+.num-chips {
+  display: inline-flex;
+  gap: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+.num-chip {
+  display: inline-block;
+  min-width: 20px;
+  text-align: center;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  font-size: 11.5px;
+}
+
+.delta-seq {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+}
+
+.delta-seq b {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.code-badge {
+  display: inline-block;
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.no-prev-note {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ---- pagination ---- */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.pagination .btn {
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 10px;
+}
+
+.pagination .btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.pagination .btn:not(:disabled):hover {
+  color: var(--text-primary);
+}
+
+/* ---- baseline note (reused across chart cards) ---- */
+
+.baseline-note .swatch {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+  background: var(--baseline);
+  vertical-align: middle;
+}
+
+/* ---- charts: shared SVG chrome ---- */
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart-svg .gridline {
+  stroke: var(--gridline);
+  stroke-width: 1;
+}
+
+.chart-svg .axis-label {
+  fill: var(--text-muted);
+  font-size: 10px;
+}
+
+.chart-svg .baseline-line {
+  stroke: var(--baseline);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 3;
+  fill: none;
+}
+
+.chart-svg .hit-target {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.chart-legend .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chart-legend .legend-swatch-line {
+  display: inline-block;
+  width: 14px;
+  height: 2px;
+}
+
+.chart-legend .legend-swatch-dash {
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  border-top: 1.5px dashed var(--baseline);
+}
+
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  font-size: 11.5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  white-space: nowrap;
+  z-index: 5;
+}
+
+.chart-tooltip .tt-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-tooltip .tt-label {
+  color: var(--text-secondary);
+  margin-right: 6px;
+}
+
+.chart-tooltip .tt-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chart-tooltip .tt-key {
+  display: inline-block;
+  width: 10px;
+  height: 2px;
+  flex: none;
+}
+
+.chart-wrap {
+  position: relative;
+}
+
+/* ---- small multiples (delta distribution) ---- */
+
+.small-multiples {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.small-multiple h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* ---- frequency bar rows (code frequency) ---- */
+
+.freq-group {
+  margin-bottom: 26px;
+}
+
+.freq-group:last-child {
+  margin-bottom: 0;
+}
+
+.freq-group h3 {
+  margin: 0 0 2px;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.freq-group .freq-sub {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.freq-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 64px;
+  align-items: center;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+.freq-row .freq-code {
+  font-family: ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 11.5px;
+  color: var(--text-secondary);
+}
+
+.freq-row .freq-bar-track {
+  position: relative;
+  height: 14px;
+  background: var(--surface-page);
+  border-radius: 3px;
+  overflow: visible;
+}
+
+.freq-row .freq-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--series-blue);
+}
+
+.freq-row .freq-baseline-mark {
+  position: absolute;
+  top: -2px;
+  bottom: -2px;
+  width: 0;
+  border-left: 1.5px dashed var(--baseline);
+}
+
+.freq-row .freq-count {
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-secondary);
+  text-align: right;
+}
+
+/* ---- draw detail ---- */
+
+.detail-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.detail-picker select {
+  font: inherit;
+  font-size: 12.5px;
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 5px 8px;
+  color: var(--text-primary);
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.detail-block {
+  background: var(--surface-page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.detail-block h4 {
+  margin: 0 0 8px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.detail-kv {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12.5px;
+  padding: 3px 0;
+}
+
+.detail-kv .k {
+  color: var(--text-secondary);
+}
+
+.detail-kv .v {
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.detail-nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
