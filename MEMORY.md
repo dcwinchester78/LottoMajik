@@ -256,3 +256,48 @@ The original repo lived only on a drive that later reported as corrupted and unr
 D: drives" — it's that a single local copy, however version-controlled, is not resilient
 to the underlying disk failing. Push to the GitHub remote early and often once one is
 connected, so the remote — not the working copy — is the durable source of truth.
+
+**Correction, 2026-08-06: the git history was not actually lost.** The rebuilt repo had
+no `origin` configured, so this went unnoticed until Phase 5. `origin/master` on
+`github.com/dcwinchester78/LottoMajik` still had the pre-crash commits through
+`12601dd` (`docs(p5): brief the React phase`) — identical hashes to the reconstructed
+local history up to that point, confirmed with
+`git merge-base --is-ancestor origin/master master`. The rebuilt local repo turned out
+to be a superset (same history plus the commits made after the crash), so it fast-forwarded
+cleanly. Moral: check for a configured remote — and fetch it — before concluding history
+is gone. The remote had been doing its job; the working copy just wasn't pointed at it.
+
+---
+
+## Phase 5 — React app decisions, 2026-08-06
+
+**No charting library.** All five views (`web/src/components/`) are hand-rolled SVG —
+`chartUtils.js` holds a binning helper, a nearest-point bisect for hover, and a
+tooltip-position helper; each chart component builds its own `<path>`/`<rect>` markup
+against a fixed `viewBox`. At five simple views over one JSON file, `recharts` or `d3`
+would be a dependency to justify, not a time-saver. Revisit only if a future view needs
+something this approach genuinely can't do cleanly (e.g. true pan/zoom over the full
+archive).
+
+**Every displayed count carries a visible baseline, not just a number in a tooltip.**
+`CodeFrequency` renders `uniformBaselinePerCode` as a dashed mark inside each bar's
+track (CSS `--baseline` token), and `DeltaDistribution`'s histograms compute their own
+naive per-bin floor (`total observations ÷ bin count`) the same way. Both are captioned
+explicitly as a naive floor, not a hypothesis test — matching the color-formula
+guidance that only status colors and validated palettes get to look authoritative.
+
+**`flags.hasPrev === false` and null `deltaSumAvg3` are rendered as prose, never as
+`0`/`—`/`NaN`.** Verified directly against `features.json`, not assumed from the
+schema: exactly one record has `hasPrev === false` (2006-04-26), and `deltaSumAvg3` is
+null for exactly the first three retained draws (non-null starting at record 4,
+`40.67`). `DrawDetail` branches on `flags.hasPrev` to show an explanatory note instead
+of the "vs. previous draw" / shuffleCode blocks; `DeltaSumTimeline`'s average line
+simply doesn't draw through the null stretch rather than interpolating or zeroing it.
+
+**No GitHub Actions/CI wired up yet.** Verification this phase was `npm run build`
+(catches compile errors) plus direct `node -e` checks against the real
+`features.json` for the null-handling edge cases — not a browser render. No browser
+automation tool was available this session, so the actual pixels were never
+screenshotted by the agent; the user was asked to eyeball `localhost:5173` directly
+instead. If that didn't happen, treat the views as build-verified but not visually
+verified.
